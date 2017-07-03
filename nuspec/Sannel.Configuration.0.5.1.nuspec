@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Sannel.Configuration</id>
+        <version>0.5.1</version>
+        <authors>Adam Holt</authors>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/Sannel/Sannel.Configuration</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>An abstract class and UWP control to expose speedup the setting for UWP apps.</description>
+        <summary>UWP Settings helper</summary>
+        <dependencies>
+            <dependency id="System.ValueTuple" version="4.3.1" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\src\Sannel.Configuration\bin\Release\Themes\Generic.xbf" target="lib\uap10.0\Themes\Generic.xbf" />
+        <file src="..\src\Sannel.Configuration\bin\Release\Sannel.Configuration.dll" target="lib\uap10.0\Sannel.Configuration.dll" />
+        <file src="..\src\Sannel.Configuration\bin\Release\Sannel.Configuration.pri" target="lib\uap10.0\Sannel.Configuration.pri" />
+        <file src="..\src\Sannel.Configuration\bin\Release\Sannel.Configuration.xml" target="lib\uap10.0\Sannel.Configuration.xml" />
+        <file src="..\src\Sannel.Configuration\bin\Release\Sannel.Configuration.xr.xml" target="lib\uap10.0\Sannel.Configuration.xr.xml" />
+    </files>
+</package>
