@@ -20,6 +20,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 
 namespace Sannel.Configuration
 {
@@ -61,6 +62,7 @@ namespace Sannel.Configuration
 				{
 					case SettingsPropertyType.String:
 					case SettingsPropertyType.Uri:
+					case SettingsPropertyType.Integer:
 
 						var element = new TextBox()
 						{
@@ -77,6 +79,15 @@ namespace Sannel.Configuration
 							scope.Names.Add(new InputScopeName()
 							{
 								NameValue = InputScopeNameValue.Url
+							});
+							element.InputScope = scope;
+						}
+						else if(type == SettingsPropertyType.Integer)
+						{
+							var scope = new InputScope();
+							scope.Names.Add(new InputScopeName()
+							{
+								NameValue = InputScopeNameValue.Number
 							});
 							element.InputScope = scope;
 						}

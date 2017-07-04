@@ -12,16 +12,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Sannel.Configuration
 {
 	public abstract class SettingsBase
 	{
+		public static Regex URL = new Regex("(?<Protocol>\\w+):\\/\\/(?<Domain>[\\w@][\\w.:@]+)\\/?[\\w\\.?=%&=\\-@/$,]*",
+											RegexOptions.IgnoreCase
+											| RegexOptions.CultureInvariant
+											| RegexOptions.IgnorePatternWhitespace
+											| RegexOptions.Compiled
+											);
+
 		protected readonly ApplicationDataContainer settings;
+
+		protected virtual Regex UriRegex => URL;
+
+
 
 		public static SettingsBase Current
 		{
@@ -37,10 +51,39 @@ namespace Sannel.Configuration
 
 		protected void Init(SettingsBase b)
 		{
-			SettingsBase.Current = b;
+			Current = b;
 		}
 
 		public abstract void Initialize();
+
+		public ObservableCollection<KeyValuePair<string, string>> Errors { get; } = new ObservableCollection<KeyValuePair<string, string>>();
+
+		/// <summary>
+		/// Adds the error to the Errors collection if <paramref name="propertyname"/> is not in the errors collection.
+		/// </summary>
+		/// <param name="error">The error.</param>
+		/// <param name="propertyname">The propertyname.</param>
+		protected void AddError(string error,[CallerMemberName]string propertyname = null)
+		{
+			var count = Errors.Count(i => string.Compare(i.Key, propertyname) == 0);
+			if(count == 0)
+			{
+				Errors.Add(new KeyValuePair<string, string>(propertyname, error));
+			}
+		}
+
+		/// <summary>
+		/// Removes any error whos key is <paramref name="propertyname"/>
+		/// </summary>
+		/// <param name="propertyname">The propertyname.</param>
+		protected void RemoveErrors([CallerMemberName]string propertyname = null)
+		{
+			var currentErrors = Errors.Where(i => string.Compare(i.Key, propertyname) == 0).ToList();
+			foreach(var cErr in currentErrors)
+			{
+				Errors.Remove(cErr);
+			}
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -121,6 +164,26 @@ namespace Sannel.Configuration
 		{
 			settings.Values[key] = value;
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
+		}
+
+		/// <summary>
+		/// Verifies the <paramref name="value"/> is a valid uri or adds an error for it.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="uriError">The URI error.</param>
+		/// <param name="key">The key.</param>
+		protected void CheckAndSetUri(string value, string uriError, [CallerMemberName]string key = null)
+		{
+			RemoveErrors(key);
+			if (UriRegex.IsMatch(value))
+			{
+				settings.Values[key] = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
+			}
+			else
+			{
+				AddError(uriError, key);
+			}
 		}
 	}
 }
