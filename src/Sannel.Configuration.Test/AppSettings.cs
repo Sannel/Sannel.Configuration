@@ -24,13 +24,20 @@ namespace Sannel.Configuration.Test
 		public string UriProp
 		{
 			get => GetValue();
-			set => SetValue(value);
+			set => CheckAndSetUri(value, "Uri Property is not a valid Url");
 		}
 
 		[SettingsProperty("Password Property", SettingsPropertyType.Password)]
 		public string PasswordProp
 		{
 			get => GetValue();
+			set => SetValue(value);
+		}
+
+		[SettingsProperty("Integer Property", SettingsPropertyType.Integer)]
+		public int IntegerProp
+		{
+			get => GetValue<int>();
 			set => SetValue(value);
 		}
 

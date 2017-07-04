@@ -18,6 +18,7 @@ namespace Sannel.Configuration
 	{
 		String = 0,
 		Uri = 1,
-		Password
+		Password,
+		Integer
 	}
 }

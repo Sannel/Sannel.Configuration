@@ -6,9 +6,22 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="local:SettingsControl">
-					<StackPanel x:Name="Panel">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="auto" />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<ListView x:Name="Errors" Grid.Row="0" ItemsSource="{Binding Errors}">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="Red" Text="{Binding Value}" />
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+						<StackPanel x:Name="Panel" Grid.Row="1">
 
-					</StackPanel>
+						</StackPanel>
+					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
